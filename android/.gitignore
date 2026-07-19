@@ -9,11 +9,17 @@ captures/
 .externalNativeBuild/
 .cxx/
 
-# Signing and local secrets
+# Signing and local secrets — NEVER commit any of these
 *.jks
+*.jks.old
 *.keystore
 keystore.properties
+signing.properties
 secrets.properties
+
+# Keystore backups — kept outside the repo; block them here as a safety net
+backup_keystore/
+backup_keystore.zip
 
 # Generated wrapper bootstrap temporary file
 gradle/wrapper/gradle-wrapper.jar.tmp
