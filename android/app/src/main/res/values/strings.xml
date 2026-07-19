@@ -1,0 +1,224 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Noor</string>
+    <string name="search">Search</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="reader">Quran reader</string>
+    <string name="surah_list">Surahs</string>
+    <string name="continue_reading">Continue reading</string>
+    <string name="continue_surah_number" tools:ignore="UnusedResources">Surah %1$d</string>
+    <string name="meccan">Meccan</string>
+    <string name="medinan">Medinan</string>
+    <plurals name="ayah_count">
+        <item quantity="one">%1$d ayah</item>
+        <item quantity="other">%1$d ayahs</item>
+    </plurals>
+    <string name="play_surah" tools:ignore="UnusedResources">Play surah</string>
+    <string name="listen">Listen</string>
+    <string name="tafsir">Tafsir</string>
+    <string name="add_bookmark" tools:ignore="UnusedResources">Bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="ayah_metadata" tools:ignore="UnusedResources">Ayah %1$d · Page %2$d · Juz %3$d</string>
+    <string name="search_hint">Search Quran text</string>
+    <string name="no_search_results">No matching ayahs were found.</string>
+    <string name="surah_and_ayah">%1$s · Ayah %2$d</string>
+    <string name="bookmarks_load_error">Bookmarks could not be loaded. Try again.</string>
+    <string name="no_bookmarks" tools:ignore="UnusedResources">You have no bookmarks yet.</string>
+    <string name="appearance">Appearance</string>
+    <string name="dynamic_color">Use device colors</string>
+    <string name="settings_update_error">The setting could not be saved. Try again.</string>
+    <string name="reading">Reading</string>
+    <string name="quran_text_size">Quran text size</string>
+    <string name="quran_text_preview">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
+    <string name="audio">Audio</string>
+    <string name="about_and_licenses">About and licenses</string>
+    <string name="attribution_summary">Quran text: Tanzil.net. Chapter and pagination metadata: quran-meta. Full notices are bundled in the app assets.</string>
+    <string name="privacy_summary">No account, analytics, advertising, contacts, or location access. Adhkar stay offline; optional reminders use local notifications. Audio and uncached tafsir require internet.</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="reciter_alafasy">Mishary Rashid Alafasy</string>
+    <string name="reciter_husary">Mahmoud Khalil Al-Husary</string>
+    <string name="reciter_minshawi">Mohamed Siddiq Al-Minshawi</string>
+    <string name="tafsir_load_error" tools:ignore="UnusedResources">Tafsir could not be loaded. Check your connection and try again.</string>
+    <string name="retry">Retry</string>
+    <string name="source" tools:ignore="UnusedResources">Source: %1$s</string>
+    <string name="pause_resume" tools:ignore="UnusedResources">Pause / resume</string>
+    <string name="stop" tools:ignore="UnusedResources">Stop</string>
+    <string name="audio_idle">Audio stopped</string>
+    <string name="audio_buffering">Loading audio…</string>
+    <string name="audio_playing">Playing recitation</string>
+    <string name="audio_paused">Recitation paused</string>
+    <string name="audio_error">Audio could not be played. Check your connection.</string>
+    <string name="open_legal_notices">Privacy and source notices</string>
+    <string name="legal_notices">Privacy and sources</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_policy_body">Noor stores bookmarks, reading position, cached tafsir, adhkar favorites, reminder choices, and preferences only on this device. It does not create accounts, show ads, run analytics, or access contacts, location, photos, microphone, or camera. Optional adhkar reminders use the device notification permission and local WorkManager scheduling. When you stream recitation or request uncached tafsir, the selected provider receives the ordinary network information needed to serve the request, such as your IP address and user agent.</string>
+    <string name="source_tanzil_title">Quran text — Tanzil</string>
+    <string name="source_tanzil_body">Uthmani Quran text version 1.0.2, copied verbatim under Creative Commons Attribution 3.0 and the Tanzil terms. The displayed Quran text is never modified; a separate normalized field is used only for search.</string>
+    <string name="source_quran_meta_title">Pagination metadata — quran-meta</string>
+    <string name="source_quran_meta_body">Hafs page, juz, and rub el hizb metadata from quran-meta 6.0.17 under the MIT License.</string>
+    <string name="source_online_services_title">Tafsir service — QuranEnc</string>
+    <string name="source_online_services_body">The Arabic Muyassar tafsir is requested on demand from QuranEnc and cached locally for offline reuse.</string>
+    <string name="source_audio_title">Recitation audio — EveryAyah</string>
+    <string name="source_audio_body">Verse audio is streamed on demand from EveryAyah. Noor does not redistribute the audio files inside the app package.</string>
+    <string name="open_source_website">Open source website</string>
+    <string name="search_error">Search could not be completed.</string>
+    <string name="quran_load_error">The Quran data could not be loaded. Try again.</string>
+    <string name="reader_load_error">This surah could not be opened. Try again or return.</string>
+    <string name="reader_bookmark_update_error">The bookmark could not be updated. Try again.</string>
+    <string name="reader_text_scale_update_error">The text size could not be saved. Try again.</string>
+    <string name="reader_progress_update_error">Your reading position could not be saved.</string>
+
+    <string name="brand_name_arabic">نور</string>
+    <string name="app_name_english">Noor</string>
+    <string name="islamic_greeting">Peace, mercy, and blessings of Allah be upon you</string>
+    <string name="memorial_note">This app is an ongoing charity in memory of my father</string>
+    <string name="start_with_fatihah">Surah Al-Fatihah</string>
+    <string name="start_reading">Start reading</string>
+    <string name="ayah_number_short">Ayah %1$d</string>
+    <string name="page_number_short">Page %1$d</string>
+    <string name="daily_reading">Today’s reading</string>
+    <string name="reading_progress_pages" tools:ignore="PluralsCandidate">%1$d / %2$d pages</string>
+    <string name="streak">Streak</string>
+    <string name="quick_access">Quick access</string>
+    <string name="quran">Quran</string>
+    <string name="recent_reciter">Recent reciter</string>
+    <string name="home">Home</string>
+    <plurals name="streak_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
+    <string name="reader_surah_title">Surah %1$s</string>
+    <string name="reader_position">Juz %1$d • Page %2$d</string>
+    <string name="reader_basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
+    <string name="reader_play_surah">Listen to surah</string>
+    <string name="reader_bookmark_action">Bookmark</string>
+    <string name="reader_tafsir_action">Tafsir</string>
+    <string name="reader_listen_action">Listen</string>
+    <string name="reader_pause_action">Pause</string>
+    <string name="reader_resume_action">Resume</string>
+    <string name="reader_text_size_action">Text size</string>
+    <string name="reader_text_size_title">Quran text size</string>
+    <string name="reader_text_scale_percent">%1$d%%</string>
+    <string name="reader_stop_audio">Stop</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="search_screen_title">Search the Quran</string>
+    <string name="search_screen_subtitle">Find an ayah by word or phrase</string>
+    <string name="search_clear">Clear search</string>
+    <string name="search_initial_title">Search the words of the Quran</string>
+    <string name="search_initial_body">Enter at least two letters. Diacritics and common Arabic letter forms are handled automatically.</string>
+    <string name="search_loading_title">Searching the Quran</string>
+    <string name="search_loading_body">Finding matching ayahs on this device…</string>
+    <string name="search_error_body">Your Quran data remains available. Try the search again.</string>
+    <string name="search_try_different_words">Try fewer words or a different part of the ayah.</string>
+    <string name="search_results_title">Search results</string>
+    <string name="search_result_position">Juz %1$d • Page %2$d</string>
+    <string name="search_open_result">Open ayah</string>
+    <plurals name="search_results_count">
+        <item quantity="one">%1$d result</item>
+        <item quantity="other">%1$d results</item>
+    </plurals>
+
+    <string name="bookmarks_screen_title">Bookmarks</string>
+    <string name="bookmarks_screen_subtitle">Return to the ayahs you saved</string>
+    <string name="bookmarks_saved_title">Saved ayahs</string>
+    <string name="bookmarks_sorted_hint">Newest bookmarks appear first</string>
+    <string name="bookmarks_loading_title">Loading bookmarks</string>
+    <string name="bookmarks_loading_body">Reading your saved ayahs from this device…</string>
+    <string name="bookmarks_error_title">Bookmarks unavailable</string>
+    <string name="bookmarks_empty_title">No saved ayahs yet</string>
+    <string name="bookmarks_empty_body">Save an ayah from the Quran reader and it will appear here for quick access.</string>
+    <string name="bookmarks_browse_quran">Browse the Quran</string>
+    <string name="bookmark_position">Juz %1$d • Page %2$d</string>
+    <string name="bookmark_open_ayah">Open ayah</string>
+    <string name="bookmark_remove_error">The bookmark could not be removed. Try again.</string>
+    <string name="bookmark_removing">Removing bookmark</string>
+    <plurals name="bookmarks_count">
+        <item quantity="one">%1$d saved ayah</item>
+        <item quantity="other">%1$d saved ayahs</item>
+    </plurals>
+
+    <string name="audio_screen_title">Listen</string>
+    <string name="audio_screen_subtitle">A calm recitation experience</string>
+    <string name="audio_surah_title">Surah %1$s</string>
+    <string name="audio_select_surah_title">Choose a surah to begin</string>
+    <string name="audio_current_ayah_metadata">Ayah %1$d • %2$d of %3$d</string>
+    <string name="audio_previous_ayah">Previous ayah</string>
+    <string name="audio_next_ayah">Next ayah</string>
+    <string name="audio_stop">Stop recitation</string>
+    <string name="audio_play">Play recitation</string>
+    <string name="audio_pause">Pause recitation</string>
+    <string name="audio_open_in_reader">Open in Quran reader</string>
+    <string name="audio_choose_reciter">Choose reciter</string>
+    <string name="audio_surah_list_title">Surahs</string>
+    <string name="audio_surah_metadata" tools:ignore="PluralsCandidate">%1$d ayahs • Page %2$d</string>
+    <string name="audio_loading_title">Preparing recitations</string>
+    <string name="audio_loading_body">Loading the offline Quran index and your listening settings…</string>
+    <string name="audio_load_error_title">Recitations are unavailable</string>
+    <string name="audio_load_error_body">The Quran index could not be opened. Your Quran data remains unchanged; try again.</string>
+    <string name="audio_reciter_update_error">The selected reciter could not be saved. Try again.</string>
+    <plurals name="audio_surah_count">
+        <item quantity="one">%1$d surah</item>
+        <item quantity="other">%1$d surahs</item>
+    </plurals>
+
+    <string name="tafsir_screen_title">Tafsir</string>
+    <string name="tafsir_refresh">Refresh</string>
+    <string name="tafsir_loading_title">Preparing the tafsir</string>
+    <string name="tafsir_loading_body">Noor is checking the local cache and the approved tafsir source…</string>
+    <string name="tafsir_error_title">Tafsir unavailable</string>
+    <string name="tafsir_error_body">The ayah remains safe in the Quran reader. Check your connection and try again.</string>
+    <string name="tafsir_refresh_error">The tafsir could not be refreshed. The saved copy is still displayed.</string>
+    <string name="tafsir_ayah_label">The noble ayah</string>
+    <string name="tafsir_ayah_position">Ayah %1$d • Page %2$d • Juz %3$d</string>
+    <string name="tafsir_explanation_title">The simplified explanation</string>
+    <string name="tafsir_footnotes_title">Source footnotes</string>
+    <string name="tafsir_cached_status">Saved on this device for offline reading</string>
+    <string name="tafsir_network_status">Freshly verified from the online source</string>
+
+
+    <string name="adhkar">Adhkar</string>
+    <string name="adhkar_screen_title">Adhkar and Duas</string>
+    <string name="adhkar_screen_subtitle">A private offline collection stored on your device</string>
+    <string name="adhkar_search">Search adhkar</string>
+    <string name="adhkar_favorites_only">Favorites only</string>
+    <string name="adhkar_category_all">All</string>
+    <string name="adhkar_category_morning">Morning</string>
+    <string name="adhkar_category_evening">Evening</string>
+    <string name="adhkar_category_after_prayer">After prayer</string>
+    <string name="adhkar_category_sleep">Sleep</string>
+    <string name="adhkar_category_waking">Waking</string>
+    <string name="adhkar_category_general">General</string>
+    <string name="adhkar_count_progress">%1$d of %2$d</string>
+    <string name="adhkar_completed">Completed</string>
+    <string name="adhkar_reset_count">Reset count</string>
+    <string name="adhkar_empty_title">No results</string>
+    <string name="adhkar_empty_body">Remove a filter or try fewer words.</string>
+    <string name="adhkar_update_error">The change could not be saved. Try again.</string>
+    <string name="adhkar_scheduling_error">The reminder could not be scheduled. Please try again.</string>
+    <string name="tasbih_title">Tasbih</string>
+    <string name="tasbih_target_value">Target: %1$d</string>
+    <string name="tasbih_tap_hint">Tap the circle to count</string>
+    <string name="tasbih_choose_phrase">Choose a phrase</string>
+    <string name="adhkar_reminders_title">Adhkar reminders</string>
+    <string name="adhkar_reminders_notice">Optional morning and evening reminders run locally without sending your data anywhere.</string>
+    <string name="adhkar_morning_reminder_title">Time for morning adhkar</string>
+    <string name="adhkar_evening_reminder_title">Time for evening adhkar</string>
+    <string name="adhkar_reminder_body">Open Noor and read your adhkar calmly.</string>
+    <string name="adhkar_reminder_time">Suggested time: %1$d:00</string>
+    <string name="adhkar_reminders_system_note">Delivery is approximate and battery optimization may delay it slightly.</string>
+    <string name="adhkar_notification_permission_denied">Reminders need notification permission in device settings.</string>
+    <string name="adhkar_reminder_channel">Adhkar reminders</string>
+    <string name="adhkar_reminder_channel_description">Optional morning and evening adhkar reminders</string>
+
+    <string name="adhkar_load_error">The offline adhkar collection could not be opened.</string>
+    <string name="adhkar_add_favorite">Add to favorites</string>
+    <string name="adhkar_remove_favorite">Remove from favorites</string>
+    <string name="tasbih_increment_action">Add one</string>
+    <string name="tasbih_completed_state">Completed %1$d of %2$d</string>
+</resources>

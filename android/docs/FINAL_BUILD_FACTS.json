@@ -1,0 +1,41 @@
+{
+  "review_date": "2026-07-17",
+  "review_passes": 4,
+  "repository_verdict": "production_hardened_source_release_candidate",
+  "static_verification": "passed",
+  "hardening_verification": "passed",
+  "android_gradle_build": "not_run_environment_blocked",
+  "android_build_blocker": "services.gradle.org DNS unavailable; Android SDK and wrapper JAR absent; sandbox JDK is 21 instead of 17",
+  "kotlin_and_kts_files": 107,
+  "xml_files": 28,
+  "python_tools": 10,
+  "github_workflows": 5,
+  "test_benchmark_profile_classes": 12,
+  "android_free_kotlin_files_compiled": 18,
+  "database_bytes": 3252224,
+  "database_sha256": "a77c6155204cbe13133ab09a253d030622d4cc2ac0c5aa2514cda007d24bfda1",
+  "surahs": 114,
+  "ayahs": 6236,
+  "fts_rows": 6236,
+  "pages": [
+    1,
+    604
+  ],
+  "juz": [
+    1,
+    30
+  ],
+  "rub": [
+    1,
+    240
+  ],
+  "integrity": "ok",
+  "foreign_key_violations": 0,
+  "schema_version": 3,
+  "fts_host_p95_ms": 0.46,
+  "baseline_profile_module": "configured_not_executed",
+  "codeql_dependency_ci": "configured_not_executed",
+  "signed_aab_tooling": "synthetic_positive_and_negative_paths_passed",
+  "audio_presentation_boundary": "QuranAudioPlayer",
+  "release_keystore_path_policy": "canonical_and_symlink_regression_tested"
+}

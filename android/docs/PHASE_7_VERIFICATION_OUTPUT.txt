@@ -1,0 +1,33 @@
+> python3 tools/verify_build_foundation.py --allow-missing-wrapper-jar
+NOTE: Wrapper JAR is absent in this sandbox; bootstrap is checksum-pinned and required before Gradle execution.
+BUILD FOUNDATION VERIFICATION: PASSED
+
+> python3 tools/verify_hardening.py
+HARDENING VERIFICATION: PASSED
+
+> python3 tools/verify_phase2_premium_home.py
+PHASE 2 PREMIUM HOME VERIFICATION: PASSED
+
+> python3 tools/verify_phase3_premium_reader.py
+PHASE 3 PREMIUM READER VERIFICATION: PASSED
+
+> python3 tools/verify_phase4_premium_search.py
+PHASE 4 PREMIUM SEARCH VERIFICATION: PASSED
+
+> python3 tools/verify_phase5_premium_bookmarks.py
+PHASE 5 PREMIUM BOOKMARKS VERIFICATION: PASSED
+
+> python3 tools/verify_phase6_premium_audio.py
+PHASE 6 PREMIUM AUDIO VERIFICATION: PASSED
+
+> python3 tools/verify_phase7_premium_tafsir.py
+PHASE 7 PREMIUM TAFSIR VERIFICATION: PASSED
+
+> python3 tools/verify_final.py
+FINAL VERIFICATION: PASSED
+- SQLite FTS host benchmark p95: 0.506 ms
+- Pure Kotlin JVM 17 files compiled with warnings as errors: 18
+- Tree-sitter Kotlin syntax scan skipped: optional package unavailable
+
+> XML resource parse
+XML PARSE: PASSED

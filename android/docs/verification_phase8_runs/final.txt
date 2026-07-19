@@ -1,0 +1,4 @@
+FINAL VERIFICATION: PASSED
+- SQLite FTS host benchmark p95: 0.480 ms
+- Pure Kotlin JVM 17 files compiled with warnings as errors: 23
+- Tree-sitter Kotlin syntax scan skipped: optional package unavailable

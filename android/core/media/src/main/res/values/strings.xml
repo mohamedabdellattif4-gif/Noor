@@ -1,0 +1,6 @@
+<resources>
+    <string name="media_ayah_title">%1$s — Ayah %2$d</string>
+    <string name="media_reciter_alafasy">Mishary Rashid Alafasy</string>
+    <string name="media_reciter_husary">Mahmoud Khalil Al-Husary</string>
+    <string name="media_reciter_minshawi">Mohamed Siddiq Al-Minshawi</string>
+</resources>

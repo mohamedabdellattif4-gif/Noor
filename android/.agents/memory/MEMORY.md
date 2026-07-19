@@ -1,0 +1,2 @@
+- [Android build environment on Replit](android-build-env.md) — JDK17 via Nix, Gradle 9.4.1 binary at ~/gradle-installs, Android SDK at ~/android-sdk; requires env-var exports each session.
+- [Noor build fixes](noor-build-fixes.md) — list of AGP/Compose API breaks fixed when setting up the Noor project build on Replit.

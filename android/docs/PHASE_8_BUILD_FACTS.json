@@ -1,0 +1,53 @@
+{
+  "phase": 8,
+  "name": "Premium Adhkar and Duas",
+  "date": "2026-07-19",
+  "implementation_status": "source-level verified",
+  "catalog": {
+    "items": 21,
+    "unique_ids": 21,
+    "categories": 6,
+    "offline": true
+  },
+  "features": [
+    "offline catalog",
+    "Arabic-normalized search",
+    "categories",
+    "local favorites",
+    "per-item counters",
+    "standalone tasbih",
+    "optional local morning/evening reminders",
+    "notification deep-link"
+  ],
+  "database": {
+    "schema_version": 4,
+    "integrity": "ok",
+    "surahs": 114,
+    "ayahs": 6236,
+    "changed_by_phase8": false
+  },
+  "focused_test_sources": 12,
+  "verification_exit_codes": {
+    "foundation": 0,
+    "final": 0,
+    "hardening": 0,
+    "phase2": 0,
+    "phase3": 0,
+    "phase4": 0,
+    "phase5": 0,
+    "phase6": 0,
+    "phase8": 0,
+    "phase7": 0,
+    "gradle_wrapper": 1
+  },
+  "android_gradle_gate": {
+    "executed": false,
+    "reason": "gradle/wrapper/gradle-wrapper.jar is absent and Android SDK is unavailable in the execution environment",
+    "required_next_commands": [
+      "./bootstrap-gradle-wrapper.sh",
+      "./gradlew clean :domain:test :app:testDebugUnitTest :app:assembleDebug :app:lintDebug",
+      "./gradlew :app:connectedDebugAndroidTest"
+    ]
+  },
+  "release_note": "A qualified Arabic proofread and source review remains required before public publication."
+}

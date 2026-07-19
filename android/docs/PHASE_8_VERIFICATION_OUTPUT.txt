@@ -1,0 +1,45 @@
+Noor Phase 8 verification output — 2026-07-19
+
+[foundation] exit=0
+NOTE: Wrapper JAR is absent in this sandbox; bootstrap is checksum-pinned and required before Gradle execution.
+BUILD FOUNDATION VERIFICATION: PASSED
+
+[final] exit=0
+FINAL VERIFICATION: PASSED
+- SQLite FTS host benchmark p95: 0.480 ms
+- Pure Kotlin JVM 17 files compiled with warnings as errors: 23
+- Tree-sitter Kotlin syntax scan skipped: optional package unavailable
+
+[hardening] exit=0
+HARDENING VERIFICATION: PASSED
+
+[phase2] exit=0
+PHASE 2 PREMIUM HOME VERIFICATION: PASSED
+
+[phase3] exit=0
+PHASE 3 PREMIUM READER VERIFICATION: PASSED
+
+[phase4] exit=0
+PHASE 4 PREMIUM SEARCH VERIFICATION: PASSED
+
+[phase5] exit=0
+PHASE 5 PREMIUM BOOKMARKS VERIFICATION: PASSED
+
+[phase6] exit=0
+PHASE 6 PREMIUM AUDIO VERIFICATION: PASSED
+
+[phase7] exit=0
+PHASE 7 PREMIUM TAFSIR VERIFICATION: PASSED
+
+[phase8] exit=0
+PASS: file exists: app/src/androidTest/kotlin/com/noor/app/ui/adhkar/AdhkarPremiumUiTest.kt
+PASS: Phase 8 defines at least 12 focused tests (found 12)
+PASS: file exists: data/src/main/kotlin/com/noor/data/local/database/NoorDatabase.kt
+PASS: Phase 8 does not change the Room schema version
+PASS: prepackaged Quran database passes integrity_check
+PASS: Quran corpus remains 114/6236 (found 114/6236)
+PASS: Android-free Phase 8 models and bundled catalog compile with kotlinc
+PHASE 8 PREMIUM ADHKAR SOURCE VERIFICATION: PASSED
+
+[gradle_wrapper] exit=1
+Gradle Wrapper JAR is missing. Run ./bootstrap-gradle-wrapper.sh first.

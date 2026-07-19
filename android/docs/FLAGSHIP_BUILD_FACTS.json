@@ -1,0 +1,92 @@
+{
+  "project": "Noor",
+  "review_date": "2026-07-19",
+  "baseline_commit": "bf8a8ecc7309a9cc51895363ed75f13519e401ef",
+  "review_status": "source_level_verified",
+  "android_status": "not_run_environment_blocked",
+  "architecture_preserved": [
+    "Clean Architecture",
+    "MVVM",
+    "Hilt",
+    "Room",
+    "Jetpack Compose",
+    "Media3"
+  ],
+  "project_toolchain": {
+    "android_gradle_plugin": "9.2.1",
+    "gradle": "9.4.1",
+    "kotlin": "2.3.10",
+    "compile_sdk": 37,
+    "target_sdk": 36,
+    "min_sdk": 23,
+    "java_target": 17,
+    "room_schema_version": 4
+  },
+  "host_environment": {
+    "java": "21.0.10",
+    "android_sdk_present": false,
+    "gradle_wrapper_jar_present": false,
+    "network_binary_download_available": false
+  },
+  "source_verification": {
+    "foundation": "passed_with_missing_wrapper_note",
+    "final": "passed",
+    "hardening": "passed",
+    "phase_2_premium_home": "passed",
+    "phase_3_premium_reader": "passed",
+    "phase_4_premium_search": "passed",
+    "phase_5_premium_bookmarks": "passed",
+    "phase_6_premium_audio": "passed",
+    "phase_7_premium_tafsir": "passed",
+    "phase_8_premium_adhkar": "passed",
+    "flagship_review_checks": 254,
+    "git_diff_check": "passed",
+    "xml_files_parsed": 28,
+    "yaml_files_parsed": 6,
+    "python_tools_compile": "passed"
+  },
+  "database": {
+    "integrity_check": "ok",
+    "user_version": 4,
+    "surahs": 114,
+    "ayahs": 6236,
+    "fts_host_p95_ms": 0.501
+  },
+  "inventory": {
+    "changed_status_entries": 47,
+    "modified_entries": 36,
+    "untracked_entries": 11,
+    "production_kotlin_files": 134,
+    "unit_test_files": 23,
+    "instrumentation_test_files": 12,
+    "test_annotations": 110,
+    "pure_kotlin_files_compiled_werror": 23
+  },
+  "android_tasks_configured_but_not_run_locally": [
+    ":core:common:test",
+    ":core:media:test",
+    ":domain:test",
+    ":data:testDebugUnitTest",
+    ":app:testDebugUnitTest",
+    ":data:pixel6Api35DebugAndroidTest",
+    ":app:pixel6Api35DebugAndroidTest",
+    ":app:assembleDebug",
+    ":app:assembleBenchmark",
+    ":app:assembleNonMinifiedRelease",
+    ":app:lintDebug",
+    ":app:lintRelease",
+    ":app:bundleRelease"
+  ],
+  "external_release_gates": [
+    "Commit a checksum-verified gradle-wrapper.jar",
+    "Run Android build with JDK 17 and Android SDK 37",
+    "Run JVM and managed-device tests",
+    "Recover authoritative Room schema JSON files 1-3",
+    "Generate and verify signed release AAB",
+    "Complete Play Console, Data Safety, privacy hosting, rights, and closed testing"
+  ],
+  "official_gradle_checksums": {
+    "gradle_9_4_1_bin_zip_sha256": "2ab2958f2a1e51120c326cad6f385153bb11ee93b3c216c5fccebfdfbb7ec6cb",
+    "gradle_9_4_1_wrapper_jar_sha256": "55243ef57851f12b070ad14f7f5bb8302daceeebc5bce5ece5fa6edb23e1145c"
+  }
+}

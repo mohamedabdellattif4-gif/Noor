@@ -1,0 +1,56 @@
+name: Generate Baseline Profile
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Enable KVM for the Gradle-managed device
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0660", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install Android SDK and emulator image
+        run: |
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager \
+            "platforms;android-37" \
+            "build-tools;36.0.0" \
+            "system-images;android-35;aosp;x86_64"
+      - name: Bootstrap checksum-verified Gradle Wrapper
+        run: ./bootstrap-gradle-wrapper.sh
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          validate-wrappers: true
+      - name: Generate profile rules on an AOSP managed device
+        run: |
+          ./gradlew :baseline-profile:pixel6Api35NonMinifiedReleaseAndroidTest \
+            -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile \
+            -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
+            --stacktrace
+      - name: Validate and install generated profile source
+        run: python3 tools/update_baseline_profile.py
+      - name: Verify updated repository
+        run: python3 tools/verify_final.py
+      - name: Upload generated profiles and test output
+        uses: actions/upload-artifact@v5
+        with:
+          name: noor-generated-baseline-profile
+          retention-days: 30
+          path: |
+            app/src/main/baseline-prof.txt
+            app/src/main/startup-prof.txt
+            baseline-profile/build/outputs/**

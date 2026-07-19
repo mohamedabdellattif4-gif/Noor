@@ -1,0 +1,59 @@
+NOOR FLAGSHIP VERIFICATION OUTPUT
+Date: 2026-07-19
+Baseline: bf8a8ecc7309a9cc51895363ed75f13519e401ef
+
+SOURCE GATES
+- python3 tools/verify_build_foundation.py --allow-missing-wrapper-jar
+  RESULT: PASSED
+  NOTE: gradle-wrapper.jar absent; checksum-pinned bootstrap required before Gradle execution.
+
+- python3 tools/verify_final.py
+  RESULT: PASSED
+  SQLite FTS host benchmark p95: 0.501 ms
+  Pure Kotlin JVM 17 files compiled with warnings as errors: 23
+  Optional tree-sitter scan skipped because the package is unavailable.
+
+- python3 tools/verify_hardening.py
+  RESULT: PASSED
+
+FEATURE REGRESSION GATES
+- Phase 2 Premium Home: PASSED
+- Phase 3 Premium Reader: PASSED
+- Phase 4 Premium Search: PASSED
+- Phase 5 Premium Bookmarks: PASSED
+- Phase 6 Premium Audio: PASSED
+- Phase 7 Premium Tafsir: PASSED
+- Phase 8 Premium Adhkar: PASSED (112 checks, 22 focused Phase 8 tests discovered)
+- Flagship Review: PASSED (254 checks)
+
+REPOSITORY INTEGRITY
+- git diff --check: PASSED
+- bash -n tools/release_gate.sh: PASSED
+- python3 -m py_compile tools/*.py: PASSED
+- XML documents parsed: 28
+- YAML documents parsed: 6
+- SQLite integrity_check: ok
+- SQLite user_version: 4
+- Quran corpus: 114 surahs / 6236 ayahs
+- Production TODO/FIXME scan: none found
+- Basic exposed-secret pattern scan: none found
+- English/Arabic resource key parity: PASSED
+
+TEST INVENTORY
+- Production Kotlin files: 134
+- JVM unit-test files: 23
+- Android instrumentation-test files: 12
+- @Test annotations: 110
+
+ANDROID EXECUTION STATUS
+- gradle-wrapper.jar: NOT PRESENT
+- Android SDK: NOT PRESENT
+- Host JDK: 21.0.10
+- Project Java target: 17
+- Gradle Android build: NOT RUN
+- Lint tasks: NOT RUN LOCALLY
+- Unit tests requiring Gradle: NOT RUN LOCALLY
+- Managed-device instrumentation tests: NOT RUN LOCALLY
+- Signed AAB/APK: NOT GENERATED
+
+The Android tasks are configured in .github/workflows/android-ci.yml and tools/release_gate.sh. This log intentionally does not label them as passed.

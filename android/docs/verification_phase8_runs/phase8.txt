@@ -1,0 +1,105 @@
+Phase 8 checks passed: 103
+PASS: English and Arabic string keys remain in parity
+PASS: Phase 8 resources exist in both locales
+PASS: file exists: data/src/main/kotlin/com/noor/data/adhkar/BundledAdhkarCatalog.kt
+PASS: data/src/main/kotlin/com/noor/data/adhkar/BundledAdhkarCatalog.kt contains class BundledAdhkarCatalog
+PASS: data/src/main/kotlin/com/noor/data/adhkar/BundledAdhkarCatalog.kt contains fun load(): List<Dhikr>
+PASS: curated catalog has at least 20 entries (found 21)
+PASS: catalog IDs are stable and unique
+PASS: catalog contains morning category
+PASS: catalog contains evening category
+PASS: catalog contains after_prayer category
+PASS: catalog contains sleep category
+PASS: catalog contains waking category
+PASS: catalog contains general category
+PASS: catalog excludes disputed starter entry pending publisher review
+PASS: catalog contains no placeholder text
+PASS: general salawat card does not prescribe an unsupported count
+PASS: file exists: domain/src/main/kotlin/com/noor/domain/model/Dhikr.kt
+PASS: domain/src/main/kotlin/com/noor/domain/model/Dhikr.kt contains data class Dhikr
+PASS: domain/src/main/kotlin/com/noor/domain/model/Dhikr.kt contains repeatCount > 0
+PASS: file exists: domain/src/main/kotlin/com/noor/domain/model/AdhkarCategory.kt
+PASS: domain/src/main/kotlin/com/noor/domain/model/AdhkarCategory.kt contains enum class AdhkarCategory
+PASS: domain/src/main/kotlin/com/noor/domain/model/AdhkarCategory.kt contains fun fromKey
+PASS: file exists: domain/src/main/kotlin/com/noor/domain/repository/AdhkarRepository.kt
+PASS: domain/src/main/kotlin/com/noor/domain/repository/AdhkarRepository.kt contains interface AdhkarRepository
+PASS: domain/src/main/kotlin/com/noor/domain/repository/AdhkarRepository.kt contains val adhkar
+PASS: domain/src/main/kotlin/com/noor/domain/repository/AdhkarRepository.kt contains setFavorite
+PASS: file exists: domain/src/main/kotlin/com/noor/domain/repository/AdhkarReminderScheduler.kt
+PASS: domain/src/main/kotlin/com/noor/domain/repository/AdhkarReminderScheduler.kt contains interface AdhkarReminderScheduler
+PASS: file exists: data/src/main/kotlin/com/noor/data/repository/DefaultAdhkarRepository.kt
+PASS: data/src/main/kotlin/com/noor/data/repository/DefaultAdhkarRepository.kt contains stringSetPreferencesKey("adhkar_favorites")
+PASS: data/src/main/kotlin/com/noor/data/repository/DefaultAdhkarRepository.kt contains booleanPreferencesKey("adhkar_morning_reminder")
+PASS: data/src/main/kotlin/com/noor/data/repository/DefaultAdhkarRepository.kt contains booleanPreferencesKey("adhkar_evening_reminder")
+PASS: data/src/main/kotlin/com/noor/data/repository/DefaultAdhkarRepository.kt contains require(bundledItems.any
+PASS: file exists: data/src/main/kotlin/com/noor/data/settings/NoorPreferencesDataStore.kt
+PASS: data/src/main/kotlin/com/noor/data/settings/NoorPreferencesDataStore.kt contains preferencesDataStore(name = "noor_settings")
+PASS: one shared Noor DataStore delegate is declared
+PASS: file exists: data/src/main/kotlin/com/noor/data/di/DataBindingsModule.kt
+PASS: data/src/main/kotlin/com/noor/data/di/DataBindingsModule.kt contains AdhkarRepository
+PASS: data/src/main/kotlin/com/noor/data/di/DataBindingsModule.kt contains DefaultAdhkarRepository
+PASS: file exists: core/navigation/src/main/kotlin/com/noor/core/navigation/NoorRoute.kt
+PASS: core/navigation/src/main/kotlin/com/noor/core/navigation/NoorRoute.kt contains const val ADHKAR = "adhkar"
+PASS: core/navigation/src/main/kotlin/com/noor/core/navigation/NoorRoute.kt contains const val TASBIH = "adhkar/tasbih"
+PASS: core/navigation/src/main/kotlin/com/noor/core/navigation/NoorRoute.kt contains const val ADHKAR_REMINDERS = "adhkar/reminders"
+PASS: file exists: app/src/main/kotlin/com/noor/app/navigation/NoorNavHost.kt
+PASS: app/src/main/kotlin/com/noor/app/navigation/NoorNavHost.kt contains AdhkarRoute(
+PASS: app/src/main/kotlin/com/noor/app/navigation/NoorNavHost.kt contains TasbihRoute(
+PASS: app/src/main/kotlin/com/noor/app/navigation/NoorNavHost.kt contains AdhkarRemindersRoute(
+PASS: app/src/main/kotlin/com/noor/app/navigation/NoorNavHost.kt contains onAdhkar
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarViewModel.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarViewModel.kt contains ArabicNormalizer.normalize
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarViewModel.kt contains MAX_QUERY_LENGTH
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarViewModel.kt contains coerceAtMost(item.repeatCount)
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarViewModel.kt contains CatalogSnapshot
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains LazyColumn
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains FilterChip
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains DhikrCard
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains AdhkarEmptyCard
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains AdhkarErrorCard
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRoute.kt contains AdhkarTestTags.CONTENT
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihViewModel.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihViewModel.kt contains TasbihUiState
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihViewModel.kt contains coerceAtMost(state.target)
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihViewModel.kt contains setOf(33, 100)
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihRoute.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihRoute.kt contains TasbihScreen
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihRoute.kt contains performHapticFeedback
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/TasbihRoute.kt contains .size(240.dp)
+PASS: file exists: app/src/main/kotlin/com/noor/app/adhkar/WorkManagerAdhkarReminderScheduler.kt
+PASS: app/src/main/kotlin/com/noor/app/adhkar/WorkManagerAdhkarReminderScheduler.kt contains PeriodicWorkRequestBuilder<AdhkarReminderWorker>
+PASS: app/src/main/kotlin/com/noor/app/adhkar/WorkManagerAdhkarReminderScheduler.kt contains ExistingPeriodicWorkPolicy.UPDATE
+PASS: app/src/main/kotlin/com/noor/app/adhkar/WorkManagerAdhkarReminderScheduler.kt contains delayUntilHour
+PASS: file exists: app/src/main/kotlin/com/noor/app/adhkar/AdhkarReminderWorker.kt
+PASS: app/src/main/kotlin/com/noor/app/adhkar/AdhkarReminderWorker.kt contains POST_NOTIFICATIONS
+PASS: app/src/main/kotlin/com/noor/app/adhkar/AdhkarReminderWorker.kt contains NotificationCompat.Builder
+PASS: app/src/main/kotlin/com/noor/app/adhkar/AdhkarReminderWorker.kt contains EXTRA_OPEN_ADHKAR
+PASS: app/src/main/kotlin/com/noor/app/adhkar/AdhkarReminderWorker.kt contains FLAG_IMMUTABLE
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRemindersRoute.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRemindersRoute.kt contains rememberLauncherForActivityResult
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRemindersRoute.kt contains RequestPermission
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRemindersRoute.kt contains POST_NOTIFICATIONS
+PASS: app/src/main/kotlin/com/noor/app/ui/adhkar/AdhkarRemindersRoute.kt contains adhkar_reminders_system_note
+PASS: file exists: app/src/main/kotlin/com/noor/app/MainActivity.kt
+PASS: app/src/main/kotlin/com/noor/app/MainActivity.kt contains override fun onNewIntent
+PASS: app/src/main/kotlin/com/noor/app/MainActivity.kt contains openAdhkar
+PASS: app/src/main/kotlin/com/noor/app/MainActivity.kt contains shouldOpenAdhkar
+PASS: file exists: app/src/main/kotlin/com/noor/app/ui/NoorApp.kt
+PASS: app/src/main/kotlin/com/noor/app/ui/NoorApp.kt contains LaunchedEffect(openAdhkar)
+PASS: app/src/main/kotlin/com/noor/app/ui/NoorApp.kt contains launchSingleTop = true
+PASS: file exists: app/src/main/AndroidManifest.xml
+PASS: notification permission is declared
+PASS: file exists: domain/src/test/kotlin/com/noor/domain/model/AdhkarModelsTest.kt
+PASS: file exists: data/src/test/kotlin/com/noor/data/adhkar/BundledAdhkarCatalogTest.kt
+PASS: file exists: app/src/test/kotlin/com/noor/app/ui/adhkar/AdhkarViewModelTest.kt
+PASS: file exists: app/src/test/kotlin/com/noor/app/ui/adhkar/TasbihViewModelTest.kt
+PASS: file exists: app/src/test/kotlin/com/noor/app/adhkar/AdhkarReminderDelayCalculatorTest.kt
+PASS: file exists: app/src/androidTest/kotlin/com/noor/app/ui/adhkar/AdhkarPremiumUiTest.kt
+PASS: Phase 8 defines at least 12 focused tests (found 12)
+PASS: file exists: data/src/main/kotlin/com/noor/data/local/database/NoorDatabase.kt
+PASS: Phase 8 does not change the Room schema version
+PASS: prepackaged Quran database passes integrity_check
+PASS: Quran corpus remains 114/6236 (found 114/6236)
+PASS: Android-free Phase 8 models and bundled catalog compile with kotlinc
+PHASE 8 PREMIUM ADHKAR SOURCE VERIFICATION: PASSED
