@@ -1,0 +1,43 @@
+name: Package Lesson 3 DOCX Root
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'generated-documents/lesson3_root_package_trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  package-root:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Prepare DOCX package roots
+        run: |
+          rm -rf student-root answer-root
+          mkdir student-root answer-root
+          unzip -q generated-documents/lesson3_friendship_student_word2010.docx -d student-root
+          unzip -q generated-documents/lesson3_friendship_answer_word2010.docx -d answer-root
+          test -f student-root/'[Content_Types].xml'
+          test -f answer-root/'[Content_Types].xml'
+
+      - name: Upload student DOCX root package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-student-docx-root-package
+          path: student-root/*
+          include-hidden-files: true
+
+      - name: Upload answer DOCX root package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-answer-docx-root-package
+          path: answer-root/*
+          include-hidden-files: true
