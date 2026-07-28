@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - lesson2-word-2010
+  pull_request:
+    branches:
+      - lesson2-word-2010
   workflow_dispatch:
 
 jobs:
