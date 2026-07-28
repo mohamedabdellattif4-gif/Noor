@@ -1,0 +1,27 @@
+name: Package updated lesson 2 files
+
+on:
+  push:
+    branches:
+      - lesson2-word-2010
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Prepare lesson files
+        run: |
+          mkdir -p artifact
+          cp generated-documents/lesson2_gold_student_word2010.doc artifact/lesson2_gold_student_word2010.doc
+          cp generated-documents/lesson2_gold_answer_word2010.doc artifact/lesson2_gold_answer_word2010.doc
+
+      - name: Upload updated lesson files
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-updated-files
+          path: artifact/*
+          if-no-files-found: error
