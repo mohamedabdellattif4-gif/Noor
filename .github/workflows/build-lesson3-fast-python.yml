@@ -1,0 +1,154 @@
+name: Build Lesson 3 DOCX Fast
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'generated-documents/lesson3_friendship_student_word2010.doc'
+      - 'generated-documents/lesson3_friendship_answer_word2010.doc'
+      - 'generated-documents/lesson3_fast_build_trigger.txt'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  build-fast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Install Python packages
+        run: pip install python-docx beautifulsoup4 lxml
+
+      - name: Convert HTML Word sources to native DOCX
+        run: |
+          python - <<'PY'
+          from bs4 import BeautifulSoup, NavigableString
+          from docx import Document
+          from docx.shared import Pt, Cm, RGBColor
+          from docx.enum.text import WD_ALIGN_PARAGRAPH
+          from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
+          from docx.oxml import OxmlElement
+          from docx.oxml.ns import qn
+          from pathlib import Path
+
+          TEAL='0A8FA5'; DARK='075B6B'; GOLD='E3A400'; RED='C62828'; GREEN='2E7D32'; LIGHT='E9F7FA'; PALE='FFF7D6'; WHITE='FFFFFF'; BLACK='1B1B1B'
+
+          def rtl(p, align=WD_ALIGN_PARAGRAPH.RIGHT):
+              p.alignment = align
+              pPr = p._p.get_or_add_pPr()
+              bidi = pPr.find(qn('w:bidi'))
+              if bidi is None:
+                  bidi = OxmlElement('w:bidi'); pPr.append(bidi)
+              bidi.set(qn('w:val'),'1')
+
+          def font(run, size=14, bold=False, color=BLACK):
+              run.font.name='Arial'
+              run._element.get_or_add_rPr().rFonts.set(qn('w:cs'),'Arial')
+              run.font.size=Pt(size); run.bold=bold; run.font.color.rgb=RGBColor.from_string(color)
+              rPr=run._r.get_or_add_rPr(); rr=rPr.find(qn('w:rtl'))
+              if rr is None: rr=OxmlElement('w:rtl'); rPr.append(rr)
+              rr.set(qn('w:val'),'1')
+
+          def shade(p, fill):
+              pPr=p._p.get_or_add_pPr(); shd=OxmlElement('w:shd'); shd.set(qn('w:fill'),fill); pPr.append(shd)
+
+          def text_with_breaks(node):
+              parts=[]
+              for x in node.descendants:
+                  if isinstance(x, NavigableString): parts.append(str(x))
+                  elif getattr(x,'name',None)=='br': parts.append('\n')
+              return ''.join(parts).strip()
+
+          def add_para(doc, text, size=14, bold=False, color=BLACK, align=WD_ALIGN_PARAGRAPH.RIGHT, fill=None):
+              p=doc.add_paragraph(); rtl(p,align); p.paragraph_format.space_after=Pt(4); p.paragraph_format.line_spacing=1.25
+              lines=text.split('\n')
+              for i,line in enumerate(lines):
+                  r=p.add_run(line); font(r,size,bold,color)
+                  if i < len(lines)-1: r.add_break()
+              if fill: shade(p,fill)
+              return p
+
+          def convert(src, out):
+              soup=BeautifulSoup(Path(src).read_text(encoding='utf-8'),'lxml')
+              doc=Document(); sec=doc.sections[0]
+              sec.page_width=Cm(21); sec.page_height=Cm(29.7); sec.top_margin=Cm(1.35); sec.bottom_margin=Cm(1.35); sec.left_margin=Cm(1.45); sec.right_margin=Cm(1.45)
+              normal=doc.styles['Normal']; normal.font.name='Arial'; normal._element.get_or_add_rPr().rFonts.set(qn('w:cs'),'Arial'); normal.font.size=Pt(14)
+              root=soup.body.find('div',class_='Section1') or soup.body
+              for el in root.children:
+                  if isinstance(el,NavigableString) or not getattr(el,'name',None): continue
+                  name=el.name; cls=el.get('class',[])
+                  if name=='h1': add_para(doc,el.get_text(' ',strip=True),27,True,WHITE,WD_ALIGN_PARAGRAPH.CENTER,DARK)
+                  elif name=='h2': add_para(doc,el.get_text(' ',strip=True),19,True,WHITE,WD_ALIGN_PARAGRAPH.RIGHT,TEAL)
+                  elif name=='h3': add_para(doc,el.get_text(' ',strip=True),16,True,DARK)
+                  elif name=='h4': add_para(doc,el.get_text(' ',strip=True),14.5,True,RED)
+                  elif name=='p':
+                      classes=set(cls); txt=text_with_breaks(el)
+                      align=WD_ALIGN_PARAGRAPH.CENTER if 'center' in classes else WD_ALIGN_PARAGRAPH.RIGHT
+                      bold='bold' in classes; color=GREEN if 'a' in classes else (DARK if 'q' in classes or 'teal' in classes else (RED if 'red' in classes else BLACK))
+                      add_para(doc,txt,13.5 if 'small' not in classes else 11.5,bold or 'q' in classes,color,align)
+                  elif name=='div':
+                      classes=set(cls)
+                      if 'pagebreak' in classes: doc.add_page_break(); continue
+                      txt=text_with_breaks(el)
+                      if not txt: continue
+                      align=WD_ALIGN_PARAGRAPH.CENTER if 'center' in classes or 'cover-sub' in classes else WD_ALIGN_PARAGRAPH.RIGHT
+                      fill=PALE if 'goldbox' in classes or 'textbox' in classes else (LIGHT if 'box' in classes else None)
+                      size=22 if 'cover-sub' in classes else 13.5
+                      add_para(doc,txt,size,'cover-sub' in classes or 'bold' in classes,DARK,align,fill)
+                  elif name=='ul':
+                      for li in el.find_all('li',recursive=False):
+                          p=add_para(doc,'• '+li.get_text(' ',strip=True),13.5); p.paragraph_format.left_indent=Cm(0.4)
+                  elif name=='table':
+                      rows=el.find_all('tr',recursive=False)
+                      if not rows: continue
+                      cols=max(len(r.find_all(['th','td'],recursive=False)) for r in rows)
+                      t=doc.add_table(rows=0,cols=cols); t.style='Table Grid'; t.alignment=WD_TABLE_ALIGNMENT.CENTER
+                      tblPr=t._tbl.tblPr; bv=OxmlElement('w:bidiVisual'); bv.set(qn('w:val'),'1'); tblPr.append(bv)
+                      for ri,row in enumerate(rows):
+                          cells=t.add_row().cells
+                          vals=row.find_all(['th','td'],recursive=False)
+                          for ci in range(cols):
+                              val=vals[ci].get_text(' ',strip=True) if ci<len(vals) else ''
+                              p=cells[ci].paragraphs[0]; rtl(p,WD_ALIGN_PARAGRAPH.CENTER if ri==0 else WD_ALIGN_PARAGRAPH.RIGHT)
+                              r=p.add_run(val); font(r,11.5,ri==0,WHITE if ri==0 else BLACK)
+                              cells[ci].vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER
+                              if ri==0:
+                                  tcPr=cells[ci]._tc.get_or_add_tcPr(); sh=OxmlElement('w:shd'); sh.set(qn('w:fill'),DARK); tcPr.append(sh)
+                      add_para(doc,'',2)
+              footer=sec.footer.paragraphs[0]; rtl(footer,WD_ALIGN_PARAGRAPH.CENTER); r=footer.add_run('درس الصداقة ـ الصف الثالث الإعدادي'); font(r,9,False,'666666')
+              doc.save(out)
+
+          convert('generated-documents/lesson3_friendship_student_word2010.doc','generated-documents/lesson3_friendship_student_word2010.docx')
+          convert('generated-documents/lesson3_friendship_answer_word2010.doc','generated-documents/lesson3_friendship_answer_word2010.docx')
+          PY
+
+      - name: Commit generated DOCX files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated-documents/lesson3_friendship_student_word2010.docx generated-documents/lesson3_friendship_answer_word2010.docx
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Build friendship lesson native DOCX files"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Upload student DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-friendship-student-native-docx
+          path: generated-documents/lesson3_friendship_student_word2010.docx
+
+      - name: Upload answer DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-friendship-answer-native-docx
+          path: generated-documents/lesson3_friendship_answer_word2010.docx
