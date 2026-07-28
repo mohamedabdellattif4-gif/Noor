@@ -1,0 +1,1 @@
+Trigger generation of previewable DOCX package artifacts.
