@@ -1,0 +1,56 @@
+name: Build previewable lesson 2 DOCX files
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+  workflow_dispatch:
+
+jobs:
+  build-docx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install LibreOffice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice-writer unzip
+
+      - name: Convert Word-compatible HTML files to DOCX
+        run: |
+          mkdir -p converted
+          libreoffice --headless --convert-to docx --outdir converted generated-documents/lesson2_gold_student_word2010.doc
+          libreoffice --headless --convert-to docx --outdir converted generated-documents/lesson2_gold_answer_word2010.doc
+          ls -la converted
+
+      - name: Prepare student DOCX package
+        run: |
+          mkdir -p student_pkg answer_pkg
+          unzip -q converted/lesson2_gold_student_word2010.docx -d student_pkg
+          unzip -q converted/lesson2_gold_answer_word2010.docx -d answer_pkg
+
+      - name: Upload student DOCX package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-student-docx-package
+          path: |
+            student_pkg/[Content_Types].xml
+            student_pkg/_rels
+            student_pkg/docProps
+            student_pkg/word
+          include-hidden-files: true
+          if-no-files-found: error
+
+      - name: Upload answer DOCX package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-answer-docx-package
+          path: |
+            answer_pkg/[Content_Types].xml
+            answer_pkg/_rels
+            answer_pkg/docProps
+            answer_pkg/word
+          include-hidden-files: true
+          if-no-files-found: error
