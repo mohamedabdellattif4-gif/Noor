@@ -19,8 +19,8 @@ jobs:
       - name: Prepare lesson files
         run: |
           mkdir -p artifact
-          cp generated-documents/lesson2_gold_student_word2010.doc artifact/lesson2_gold_student_word2010.doc
-          cp generated-documents/lesson2_gold_answer_word2010.doc artifact/lesson2_gold_answer_word2010.doc
+          cp generated-documents/lesson2_gold_student_word2010.doc artifact/أغلى_من_الذهب_نسخة_الطالب_بعد_الإضافة.doc
+          cp generated-documents/lesson2_gold_answer_word2010.doc artifact/نموذج_إجابة_أغلى_من_الذهب_بعد_الإضافة.doc
 
       - name: Upload updated lesson files
         uses: actions/upload-artifact@v4
