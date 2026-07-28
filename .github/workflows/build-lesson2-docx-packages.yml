@@ -20,12 +20,14 @@ jobs:
 
       - name: Convert Word-compatible HTML files to DOCX
         run: |
-          mkdir -p converted
-          libreoffice --headless --convert-to docx --outdir converted generated-documents/lesson2_gold_student_word2010.doc
-          libreoffice --headless --convert-to docx --outdir converted generated-documents/lesson2_gold_answer_word2010.doc
+          mkdir -p converted source_html
+          cp generated-documents/lesson2_gold_student_word2010.doc source_html/lesson2_gold_student_word2010.html
+          cp generated-documents/lesson2_gold_answer_word2010.doc source_html/lesson2_gold_answer_word2010.html
+          libreoffice --headless --convert-to 'docx:Office Open XML Text' --outdir converted source_html/lesson2_gold_student_word2010.html
+          libreoffice --headless --convert-to 'docx:Office Open XML Text' --outdir converted source_html/lesson2_gold_answer_word2010.html
           ls -la converted
 
-      - name: Prepare student DOCX package
+      - name: Prepare DOCX packages
         run: |
           mkdir -p student_pkg answer_pkg
           unzip -q converted/lesson2_gold_student_word2010.docx -d student_pkg
