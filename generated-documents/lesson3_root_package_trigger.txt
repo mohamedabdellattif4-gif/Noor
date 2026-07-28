@@ -1,0 +1,1 @@
+Package the generated lesson 3 DOCX contents at the artifact root so the downloaded artifact can be opened directly as a DOCX file.
