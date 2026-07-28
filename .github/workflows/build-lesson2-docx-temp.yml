@@ -1,0 +1,32 @@
+name: Build Lesson 2 DOCX
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - '.github/workflows/build-lesson2-docx-temp.yml'
+
+jobs:
+  build-docx:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+      - name: Convert Word-compatible HTML to DOCX
+        run: |
+          mkdir -p artifacts
+          pandoc "generated-documents/lesson2_gold_student_word2010.doc" --from=html --to=docx --output="artifacts/lesson2_gold_student_updated.docx"
+          pandoc "generated-documents/lesson2_gold_answer_word2010.doc" --from=html --to=docx --output="artifacts/lesson2_gold_answer_updated.docx"
+      - name: Upload DOCX files
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-updated-docx
+          path: artifacts/*.docx
+          if-no-files-found: error
