@@ -1,0 +1,60 @@
+name: Build Lesson 3 DOCX on PR
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'generated-documents/lesson3_friendship_student_word2010.doc'
+      - 'generated-documents/lesson3_friendship_answer_word2010.doc'
+      - '.github/workflows/build-lesson3-friendship-docx.yml'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  build-lesson3-docx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Install LibreOffice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice-writer
+
+      - name: Convert lesson files to DOCX
+        run: |
+          libreoffice --headless --convert-to docx --outdir generated-documents generated-documents/lesson3_friendship_student_word2010.doc
+          libreoffice --headless --convert-to docx --outdir generated-documents generated-documents/lesson3_friendship_answer_word2010.doc
+          test -f generated-documents/lesson3_friendship_student_word2010.docx
+          test -f generated-documents/lesson3_friendship_answer_word2010.docx
+
+      - name: Commit generated DOCX files to PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated-documents/lesson3_friendship_student_word2010.docx generated-documents/lesson3_friendship_answer_word2010.docx
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Build updated friendship lesson DOCX files"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Upload student DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-friendship-student-docx
+          path: generated-documents/lesson3_friendship_student_word2010.docx
+
+      - name: Upload answer DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-friendship-answer-docx
+          path: generated-documents/lesson3_friendship_answer_word2010.docx
