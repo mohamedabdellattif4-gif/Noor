@@ -1,0 +1,56 @@
+name: Build Expanded Lesson 2 DOCX
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'expanded-lesson2/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-expanded-lesson2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Install LibreOffice
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice-writer
+
+      - name: Convert Word-compatible HTML sources to DOCX
+        run: |
+          mkdir -p generated-expanded-lesson2
+          libreoffice --headless --convert-to docx --outdir generated-expanded-lesson2 expanded-lesson2/lesson2_gold_expanded_student_word2010.doc
+          libreoffice --headless --convert-to docx --outdir generated-expanded-lesson2 expanded-lesson2/lesson2_gold_expanded_answer_word2010.doc
+          mv generated-expanded-lesson2/lesson2_gold_expanded_student_word2010.docx generated-expanded-lesson2/lesson2_gold_expanded_student_Word2010.docx
+          mv generated-expanded-lesson2/lesson2_gold_expanded_answer_word2010.docx generated-expanded-lesson2/lesson2_gold_expanded_answer_Word2010.docx
+
+      - name: Commit generated DOCX files to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated-expanded-lesson2/*.docx
+          if ! git diff --cached --quiet; then
+            git commit -m "Build fully expanded lesson 2 DOCX files"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Upload student DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-expanded-student-docx
+          path: generated-expanded-lesson2/lesson2_gold_expanded_student_Word2010.docx
+
+      - name: Upload answer DOCX
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-expanded-answer-docx
+          path: generated-expanded-lesson2/lesson2_gold_expanded_answer_Word2010.docx
