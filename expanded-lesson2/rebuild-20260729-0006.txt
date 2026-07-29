@@ -1,0 +1,1 @@
+Rebuild fully expanded lesson 2 DOCX files after converter fix.
