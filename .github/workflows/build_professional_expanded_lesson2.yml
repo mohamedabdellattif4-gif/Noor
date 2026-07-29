@@ -47,16 +47,6 @@ jobs:
           pdftoppm -f 3 -singlefile -png -r 120 preview-expanded-lesson2/lesson2_gold_expanded_professional_student_Word2010.pdf preview-expanded-lesson2/student_page_3
           pdftoppm -f 4 -singlefile -png -r 120 preview-expanded-lesson2/lesson2_gold_expanded_professional_student_Word2010.pdf preview-expanded-lesson2/student_page_4
 
-      - name: Commit generated files to branch
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add professional-expanded-lesson2 preview-expanded-lesson2
-          if ! git diff --cached --quiet; then
-            git commit -m 'Build professionally formatted expanded lesson 2 Word files'
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          fi
-
       - name: Upload student Word package
         uses: actions/upload-artifact@v4
         with:
@@ -74,3 +64,15 @@ jobs:
         with:
           name: lesson2-professional-previews
           path: preview-expanded-lesson2
+
+      - name: Commit generated files to branch when possible
+        continue-on-error: true
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add professional-expanded-lesson2 preview-expanded-lesson2
+          if ! git diff --cached --quiet; then
+            git commit -m 'Build professionally formatted expanded lesson 2 Word files'
+            git pull --rebase origin ${{ github.event.pull_request.head.ref }}
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
