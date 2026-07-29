@@ -27,9 +27,11 @@ jobs:
 
       - name: Convert Word-compatible HTML sources to DOCX
         run: |
-          mkdir -p generated-expanded-lesson2
-          libreoffice --headless --convert-to docx --outdir generated-expanded-lesson2 expanded-lesson2/lesson2_gold_expanded_student_word2010.doc
-          libreoffice --headless --convert-to docx --outdir generated-expanded-lesson2 expanded-lesson2/lesson2_gold_expanded_answer_word2010.doc
+          mkdir -p generated-expanded-lesson2 conversion-input
+          cp expanded-lesson2/lesson2_gold_expanded_student_word2010.doc conversion-input/lesson2_gold_expanded_student_word2010.html
+          cp expanded-lesson2/lesson2_gold_expanded_answer_word2010.doc conversion-input/lesson2_gold_expanded_answer_word2010.html
+          libreoffice --headless --convert-to 'docx:Office Open XML Text' --outdir generated-expanded-lesson2 conversion-input/lesson2_gold_expanded_student_word2010.html
+          libreoffice --headless --convert-to 'docx:Office Open XML Text' --outdir generated-expanded-lesson2 conversion-input/lesson2_gold_expanded_answer_word2010.html
           mv generated-expanded-lesson2/lesson2_gold_expanded_student_word2010.docx generated-expanded-lesson2/lesson2_gold_expanded_student_Word2010.docx
           mv generated-expanded-lesson2/lesson2_gold_expanded_answer_word2010.docx generated-expanded-lesson2/lesson2_gold_expanded_answer_Word2010.docx
 
