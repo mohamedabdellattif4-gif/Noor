@@ -1,0 +1,63 @@
+name: Build Rebuilt Lesson 2 Word Files
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'rebuilt-lesson2/**'
+      - '.github/workflows/build-rebuilt-lesson2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Install document tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install python-docx
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice-writer poppler-utils
+
+      - name: Build native Word files
+        run: |
+          rm -rf rebuilt-lesson2/output rebuilt-lesson2/preview
+          mkdir -p rebuilt-lesson2/output rebuilt-lesson2/preview
+          python rebuilt-lesson2/build_lesson2_rebuilt.py --outdir rebuilt-lesson2/output
+
+      - name: Create PDF previews
+        run: |
+          for f in rebuilt-lesson2/output/*.docx; do
+            libreoffice --headless --convert-to pdf --outdir rebuilt-lesson2/preview "$f"
+          done
+          student_pdf=$(find rebuilt-lesson2/preview -maxdepth 1 -type f -name '*نسخة_الطالب*.pdf' | head -n 1)
+          pdftoppm -f 1 -singlefile -png -r 120 "$student_pdf" rebuilt-lesson2/preview/معاينة_الغلاف
+          pdftoppm -f 4 -singlefile -png -r 120 "$student_pdf" rebuilt-lesson2/preview/معاينة_شرح_الفقرة_الأولى
+          pdftoppm -f 8 -singlefile -png -r 120 "$student_pdf" rebuilt-lesson2/preview/معاينة_التحليل_بعد_الفقرة
+
+      - name: Upload student Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-rebuilt-student-word
+          path: rebuilt-lesson2/output/*نسخة_الطالب*.docx
+
+      - name: Upload answer Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-rebuilt-answer-word
+          path: rebuilt-lesson2/output/*نموذج_إجابة*.docx
+
+      - name: Upload preview package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-rebuilt-previews
+          path: rebuilt-lesson2/preview
