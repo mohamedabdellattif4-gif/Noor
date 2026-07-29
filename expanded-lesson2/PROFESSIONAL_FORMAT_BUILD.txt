@@ -1,0 +1,2 @@
+Build the expanded lesson 2 as a native, professionally formatted Arabic Word 2010 document matching the visual system of lesson 1.
+Rebuild after improving artifact upload reliability.
