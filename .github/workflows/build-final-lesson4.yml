@@ -1,0 +1,64 @@
+name: Build Final Approved Lesson 4 Poem
+
+on:
+  pull_request:
+    branches:
+      - lesson3-final-approved-system-20260729
+    paths:
+      - 'final-lesson4/**'
+      - '.github/workflows/build-final-lesson4.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install document tools
+        run: |
+          python -m pip install python-docx
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice-writer poppler-utils unzip
+
+      - name: Build and validate native Word files
+        run: |
+          rm -rf final-lesson4/output final-lesson4/preview final-lesson4/package
+          mkdir -p final-lesson4/output final-lesson4/preview final-lesson4/package/student final-lesson4/package/answer
+          python -m py_compile final-lesson4/lesson4_data.py final-lesson4/build_final_lesson4.py
+          python final-lesson4/build_final_lesson4.py --outdir final-lesson4/output
+
+      - name: Create PDF visual preview
+        run: |
+          libreoffice --headless --convert-to pdf --outdir final-lesson4/preview final-lesson4/output/*نسخة_الطالب*.docx
+          PDF=$(find final-lesson4/preview -name '*.pdf' -type f | head -1)
+          pdftoppm -f 1 -l 8 -png -r 110 "$PDF" final-lesson4/preview/page
+
+      - name: Package direct DOCX artifacts
+        run: |
+          STUDENT=$(find final-lesson4/output -name '*نسخة_الطالب*.docx' -type f | head -1)
+          ANSWER=$(find final-lesson4/output -name '*نموذج_إجابة*.docx' -type f | head -1)
+          unzip -q "$STUDENT" -d final-lesson4/package/student
+          unzip -q "$ANSWER" -d final-lesson4/package/answer
+
+      - name: Upload direct student Word package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson4-final-student-docx-package
+          path: final-lesson4/package/student
+          include-hidden-files: true
+
+      - name: Upload direct answer Word package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson4-final-answer-docx-package
+          path: final-lesson4/package/answer
+          include-hidden-files: true
+
+      - name: Upload visual preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson4-final-preview
+          path: final-lesson4/preview
