@@ -20,10 +20,21 @@ jobs:
       - name: Install python-docx
         run: python -m pip install python-docx
 
-      - name: Build native Word files
+      - name: Repair and build native Word files
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('rebuilt-lesson2/build_lesson2_rebuilt.py')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace(
+              '["الحكم", "الفقرة شديدة التأثير؛ لأنها تجعل القارئ يعيش لحظة الاختيار قبل معرفة القرار."\n        ],',
+              '["الحكم", "الفقرة شديدة التأثير؛ لأنها تجعل القارئ يعيش لحظة الاختيار قبل معرفة القرار."]\n        ],'
+          )
+          p.write_text(s, encoding='utf-8')
+          PY
           rm -rf rebuilt-lesson2/output
           mkdir -p rebuilt-lesson2/output
+          python -m py_compile rebuilt-lesson2/build_lesson2_rebuilt.py
           python rebuilt-lesson2/build_lesson2_rebuilt.py --outdir rebuilt-lesson2/output
 
       - name: Upload student Word file
