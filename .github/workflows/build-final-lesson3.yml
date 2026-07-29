@@ -1,0 +1,55 @@
+name: Build Final Approved Lesson 3
+
+on:
+  pull_request:
+    branches:
+      - lesson3-friendship-word-2010
+    paths:
+      - 'final-lesson3/**'
+      - '.github/workflows/build-final-lesson3.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install document tools
+        run: |
+          python -m pip install python-docx
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice-writer poppler-utils
+
+      - name: Build and validate native Word files
+        run: |
+          rm -rf final-lesson3/output final-lesson3/preview
+          mkdir -p final-lesson3/output final-lesson3/preview
+          python -m py_compile final-lesson3/lesson3_data.py final-lesson3/build_final_lesson3.py
+          python final-lesson3/build_final_lesson3.py --outdir final-lesson3/output
+
+      - name: Create PDF visual previews
+        run: |
+          libreoffice --headless --convert-to pdf --outdir final-lesson3/preview final-lesson3/output/*نسخة_الطالب*.docx
+          PDF=$(find final-lesson3/preview -name '*.pdf' -type f | head -1)
+          pdftoppm -f 1 -l 6 -png -r 110 "$PDF" final-lesson3/preview/page
+
+      - name: Upload student Word
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-final-student-word
+          path: final-lesson3/output/*نسخة_الطالب*.docx
+
+      - name: Upload answer Word
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-final-answer-word
+          path: final-lesson3/output/*نموذج_إجابة*.docx
+
+      - name: Upload visual preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson3-final-preview
+          path: final-lesson3/preview
