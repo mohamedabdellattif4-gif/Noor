@@ -1,0 +1,56 @@
+name: Build Rebuilt Lesson 2 Word Files Fast
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'rebuilt-lesson2/**'
+      - '.github/workflows/build-rebuilt-lesson2-fast.yml'
+
+jobs:
+  build-word:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install python-docx
+        run: python -m pip install python-docx
+
+      - name: Repair and build native Word files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('rebuilt-lesson2/build_lesson2_rebuilt.py')
+          s = p.read_text(encoding='utf-8')
+          repairs = {
+              '["الحكم", "الفقرة شديدة التأثير؛ لأنها تجعل القارئ يعيش لحظة الاختيار قبل معرفة القرار."\n        ],':
+              '["الحكم", "الفقرة شديدة التأثير؛ لأنها تجعل القارئ يعيش لحظة الاختيار قبل معرفة القرار."]\n        ],',
+              '["الحكم", "الفقرة موثقة ومقنعة؛ لأن أثر الموقف ظهر في اعتراف دولي متعدد الصور."\n        ],':
+              '["الحكم", "الفقرة موثقة ومقنعة؛ لأن أثر الموقف ظهر في اعتراف دولي متعدد الصور."]\n        ],',
+              '["الحكم", "خاتمة ناجحة؛ لأنها لا تكرر الأحداث، بل تحولها إلى قاعدة سلوكية ودعوة عملية."\n        ],':
+              '["الحكم", "خاتمة ناجحة؛ لأنها لا تكرر الأحداث، بل تحولها إلى قاعدة سلوكية ودعوة عملية."]\n        ],',
+          }
+          for old, new in repairs.items():
+              s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+          PY
+          rm -rf rebuilt-lesson2/output
+          mkdir -p rebuilt-lesson2/output
+          python -m py_compile rebuilt-lesson2/build_lesson2_rebuilt.py
+          python rebuilt-lesson2/build_lesson2_rebuilt.py --outdir rebuilt-lesson2/output
+
+      - name: Upload student Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-rebuilt-student-word-fast
+          path: rebuilt-lesson2/output/*نسخة_الطالب*.docx
+
+      - name: Upload answer Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-rebuilt-answer-word-fast
+          path: rebuilt-lesson2/output/*نموذج_إجابة*.docx

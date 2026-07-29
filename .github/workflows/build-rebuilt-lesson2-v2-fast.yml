@@ -1,0 +1,48 @@
+name: Build Final Corrected Lesson 2 Fast
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'rebuilt-lesson2-v2/**'
+      - '.github/workflows/build-rebuilt-lesson2-v2-fast.yml'
+
+jobs:
+  build-fast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Install python-docx
+        run: python -m pip install python-docx
+      - name: Build and validate Word files
+        run: |
+          rm -rf rebuilt-lesson2-v2/output-fast
+          mkdir -p rebuilt-lesson2-v2/output-fast
+          python -m py_compile rebuilt-lesson2-v2/build_lesson2_v2.py
+          python rebuilt-lesson2-v2/build_lesson2_v2.py --outdir rebuilt-lesson2-v2/output-fast
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          required = ['عناصر تحليل النص مطبقة على الفقرة','عناصر تذوق النص مطبقة على الفقرة','أسئلة كتاب المدرسة المدمجة كاملة','التدريبات الشاملة في نهاية الدرس','١٣ ـ الموازنة الشعرية']
+          for p in Path('rebuilt-lesson2-v2/output-fast').glob('*.docx'):
+              with ZipFile(p) as z:
+                  xml = z.read('word/document.xml').decode('utf-8')
+              assert all(x in xml for x in required)
+              assert xml.count('bidiVisual') >= 20
+              assert xml.count('<w:tbl>') >= 40
+              print(p.name, 'VALIDATED', 'RTL=', xml.count('bidiVisual'), 'TABLES=', xml.count('<w:tbl>'))
+          PY
+      - name: Upload student Word
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-final-corrected-student-word-fast
+          path: rebuilt-lesson2-v2/output-fast/*نسخة_الطالب*.docx
+      - name: Upload answer Word
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-final-corrected-answer-word-fast
+          path: rebuilt-lesson2-v2/output-fast/*نموذج_إجابة*.docx

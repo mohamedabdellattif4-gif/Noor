@@ -1,0 +1,89 @@
+name: Build Final Corrected Lesson 2 Word Files
+
+on:
+  pull_request:
+    branches:
+      - lesson2-word-2010
+    paths:
+      - 'rebuilt-lesson2-v2/**'
+      - '.github/workflows/build-rebuilt-lesson2-v2.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install document tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install python-docx
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice-writer poppler-utils
+
+      - name: Build native Word files
+        run: |
+          rm -rf rebuilt-lesson2-v2/output rebuilt-lesson2-v2/preview
+          mkdir -p rebuilt-lesson2-v2/output rebuilt-lesson2-v2/preview
+          python -m py_compile rebuilt-lesson2-v2/build_lesson2_v2.py
+          python rebuilt-lesson2-v2/build_lesson2_v2.py --outdir rebuilt-lesson2-v2/output
+
+      - name: Validate document structure and required content
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          required = [
+              'عناصر تحليل النص مطبقة على الفقرة',
+              'عناصر تذوق النص مطبقة على الفقرة',
+              'أسئلة كتاب المدرسة المدمجة كاملة',
+              'التدريبات الشاملة في نهاية الدرس',
+              '١ ـ نوع النص',
+              '٨ ـ القيم المتضمنة وتطبيقاتها الحياتية',
+              '١٣ ـ الموازنة الشعرية',
+          ]
+          report = []
+          for path in sorted(Path('rebuilt-lesson2-v2/output').glob('*.docx')):
+              with ZipFile(path) as z:
+                  xml = z.read('word/document.xml').decode('utf-8')
+              missing = [item for item in required if item not in xml]
+              bidi_count = xml.count('bidiVisual')
+              table_count = xml.count('<w:tbl>')
+              assert not missing, (path, missing)
+              assert bidi_count >= 20, (path, bidi_count)
+              assert table_count >= 40, (path, table_count)
+              report.append(f'{path.name}: OK | RTL tables={bidi_count} | tables={table_count}')
+          Path('rebuilt-lesson2-v2/preview/validation.txt').write_text('\n'.join(report), encoding='utf-8')
+          print('\n'.join(report))
+          PY
+
+      - name: Create PDF previews
+        run: |
+          libreoffice --headless --convert-to pdf --outdir rebuilt-lesson2-v2/preview rebuilt-lesson2-v2/output/*.docx
+          STUDENT_PDF=$(find rebuilt-lesson2-v2/preview -name '*نسخة_الطالب*.pdf' -print -quit)
+          pdftoppm -f 1 -l 8 -png -r 105 "$STUDENT_PDF" rebuilt-lesson2-v2/preview/student_begin
+          PAGES=$(pdfinfo "$STUDENT_PDF" | awk '/Pages:/ {print $2}')
+          START=$((PAGES-5)); if [ "$START" -lt 1 ]; then START=1; fi
+          pdftoppm -f "$START" -l "$PAGES" -png -r 105 "$STUDENT_PDF" rebuilt-lesson2-v2/preview/student_end
+          pdfinfo "$STUDENT_PDF" > rebuilt-lesson2-v2/preview/student_pdfinfo.txt
+
+      - name: Upload student Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-final-corrected-student-word
+          path: rebuilt-lesson2-v2/output/*نسخة_الطالب*.docx
+
+      - name: Upload answer Word file
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-final-corrected-answer-word
+          path: rebuilt-lesson2-v2/output/*نموذج_إجابة*.docx
+
+      - name: Upload preview and validation package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lesson2-final-corrected-preview-validation
+          path: rebuilt-lesson2-v2/preview
