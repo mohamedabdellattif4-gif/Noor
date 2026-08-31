@@ -1,0 +1,144 @@
+name: Android Build Host
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Build mode
+        required: true
+        default: warm-and-build
+        type: choice
+        options:
+          - warm-and-build
+          - offline-verify
+
+concurrency:
+  group: android-build-host-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  JAVA_VERSION: '17'
+  ANDROID_API: '37'
+  ANDROID_BUILD_TOOLS: '36.0.0'
+  GRADLE_VERSION: '9.4.1'
+  GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-home
+
+jobs:
+  build-host:
+    name: Build Host / Warm Vault / APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Restore Android SDK vault cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.ANDROID_HOME }}/platforms
+            ${{ env.ANDROID_HOME }}/build-tools
+            ${{ env.ANDROID_HOME }}/platform-tools
+            ${{ env.ANDROID_HOME }}/licenses
+          key: noor-android-vault-api${{ env.ANDROID_API }}-bt${{ env.ANDROID_BUILD_TOOLS }}-${{ runner.os }}-v1
+
+      - name: Install pinned Android SDK toolchain
+        run: |
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-${ANDROID_API}" \
+            "build-tools;${ANDROID_BUILD_TOOLS}"
+
+      - name: Restore Gradle dependency vault
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.GRADLE_USER_HOME }}/caches
+            ${{ env.GRADLE_USER_HOME }}/wrapper
+          key: noor-gradle-vault-${{ env.GRADLE_VERSION }}-java${{ env.JAVA_VERSION }}-${{ runner.os }}-${{ hashFiles('android/gradle/libs.versions.toml', 'android/gradle/wrapper/gradle-wrapper.properties', 'android/**/build.gradle.kts', 'android/**/build.gradle') }}
+          restore-keys: |
+            noor-gradle-vault-${{ env.GRADLE_VERSION }}-java${{ env.JAVA_VERSION }}-${{ runner.os }}-
+
+      - name: Verify wrapper and toolchain pins
+        run: |
+          test -x ./gradlew
+          ./gradlew --version
+          test "$(./gradlew --version | awk '/Gradle / {print $2; exit}')" = "${GRADLE_VERSION}"
+          java -version
+          sdkmanager --list_installed | grep -E "platforms;android-${ANDROID_API}|build-tools;${ANDROID_BUILD_TOOLS}|platform-tools"
+
+      - name: Warm dependency vault and compile APK
+        if: github.event_name != 'workflow_dispatch' || inputs.mode == 'warm-and-build'
+        run: |
+          ./gradlew clean \
+            :core:common:test \
+            :core:media:test \
+            :domain:test \
+            :data:testDebugUnitTest \
+            :app:testDebugUnitTest \
+            :data:assembleAndroidTest \
+            :app:assembleDebug \
+            :app:assembleNonMinifiedRelease \
+            :app:lintDebug \
+            :app:lintRelease \
+            --warning-mode=all \
+            --stacktrace
+          ./gradlew :app:bundleRelease --stacktrace
+
+      - name: Offline verification against warmed vault
+        run: |
+          ./gradlew :app:assembleDebug --offline --stacktrace
+          ./gradlew :app:bundleRelease --offline --stacktrace
+
+      - name: Generate Build Vault manifest
+        if: always()
+        run: |
+          mkdir -p build/vault
+          cat > build/vault/BUILD_ENV_MANIFEST.json <<EOF
+          {
+            "vault": "NOOR_ANDROID_BUILD_VAULT",
+            "profile": "api${ANDROID_API}-bt${ANDROID_BUILD_TOOLS}-gradle${GRADLE_VERSION}-jdk${JAVA_VERSION}",
+            "runner": "github-hosted-ubuntu-latest",
+            "java_version": "${JAVA_VERSION}",
+            "android_api": "${ANDROID_API}",
+            "android_build_tools": "${ANDROID_BUILD_TOOLS}",
+            "gradle_version": "${GRADLE_VERSION}",
+            "gradle_user_home": "${GRADLE_USER_HOME}",
+            "offline_verified": true,
+            "generated_at": "${GITHUB_RUN_ID}",
+            "source_sha": "${GITHUB_SHA}"
+          }
+          EOF
+          sha256sum build/vault/BUILD_ENV_MANIFEST.json > build/vault/SHA256SUMS
+
+      - name: Upload APK and Build Vault manifest
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: noor-build-host-${{ github.run_id }}
+          retention-days: 90
+          if-no-files-found: ignore
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/bundle/release/*.aab
+            android/app/build/reports/**
+            android/build/vault/BUILD_ENV_MANIFEST.json
+            android/build/vault/SHA256SUMS
