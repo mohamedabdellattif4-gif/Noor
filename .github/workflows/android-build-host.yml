@@ -27,7 +27,6 @@ env:
   ANDROID_API: '37'
   ANDROID_BUILD_TOOLS: '36.0.0'
   GRADLE_VERSION: '9.4.1'
-  GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-home
 
 jobs:
   build-host:
@@ -69,19 +68,10 @@ jobs:
             "build-tools;${ANDROID_BUILD_TOOLS}"
           sdkmanager --list_installed | grep -E "platforms;android-${ANDROID_API}|build-tools;${ANDROID_BUILD_TOOLS}|platform-tools"
 
-      - name: Restore Gradle dependency Vault
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ env.GRADLE_USER_HOME }}/caches
-            ${{ env.GRADLE_USER_HOME }}/wrapper
-          key: noor-gradle-vault-${{ env.GRADLE_VERSION }}-java${{ env.JAVA_VERSION }}-${{ runner.os }}-${{ hashFiles('android/gradle/libs.versions.toml', 'android/gradle/wrapper/gradle-wrapper.properties', 'android/**/build.gradle.kts', 'android/**/build.gradle') }}
-          restore-keys: |
-            noor-gradle-vault-${{ env.GRADLE_VERSION }}-java${{ env.JAVA_VERSION }}-${{ runner.os }}-
-
-      - name: Configure Gradle
+      - name: Configure Gradle dependency Vault
         uses: gradle/actions/setup-gradle@v6
         with:
+          cache-provider: basic
           gradle-home-cache-cleanup: false
           cache-read-only: false
 
